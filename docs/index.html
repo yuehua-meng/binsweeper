@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BinSweeper — Windows 回收站小文件清理工具 | Recycle Bin Cleaner</title>
+<meta name="description" content="BinSweeper 是开源的 Windows 回收站清理工具：只清理 ≤1 MiB 的小文件，大文件一个都不碰，先移入待清理区，7 天内可恢复。解决回收站几十万条目导致的资源管理器卡死。">
+<meta name="keywords" content="回收站清理,Windows 回收站,清空回收站卡死,回收站小文件,磁盘清理,Recycle Bin cleaner,Windows disk cleanup,BinSweeper">
+<meta name="author" content="yuehua-meng">
+<link rel="canonical" href="https://yuehua-meng.github.io/binsweeper/">
+<link rel="icon" href="assets/app-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="BinSweeper">
+<meta property="og:title" content="BinSweeper — 回收站小文件清理器">
+<meta property="og:description" content="只清理 ≤1 MiB 的小文件，大文件一个都不碰；先移入待清理区，7 天内可恢复。让回收站从卡死变回能用。">
+<meta property="og:url" content="https://yuehua-meng.github.io/binsweeper/">
+<meta property="og:image" content="https://yuehua-meng.github.io/binsweeper/assets/social-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BinSweeper — 回收站小文件清理器">
+<meta name="twitter:description" content="只清理 ≤1 MiB 的小文件，大文件一个都不碰。开源的 Windows 回收站清理工具。">
+<meta name="twitter:image" content="https://yuehua-meng.github.io/binsweeper/assets/social-preview.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "BinSweeper",
+  "operatingSystem": "Windows 10, Windows 11",
+  "applicationCategory": "UtilitiesApplication",
+  "applicationSubCategory": "File Cleanup",
+  "softwareVersion": "0.1.0",
+  "license": "https://github.com/yuehua-meng/binsweeper/blob/main/LICENSE",
+  "downloadUrl": "https://github.com/yuehua-meng/binsweeper/releases/latest",
+  "codeRepository": "https://github.com/yuehua-meng/binsweeper",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+  "description": "只清理 Recycle Bin 中 ≤1 MiB 的小文件，大文件不自动处理，混合目录整目录跳过；先移入待清理区，7 天内可恢复。"
+}
+</script>
+
+<style>
+  :root{
+    --bg:#07131b; --bg2:#0a1d1a; --panel:#0d1c24; --line:rgba(148,163,184,.16);
+    --text:#e6edf3; --muted:#94a3b8; --dim:#64748b; --green:#34d399; --green2:#059669;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:'Segoe UI','Microsoft YaHei',system-ui,-apple-system,sans-serif;
+    line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1120px,calc(100% - 48px));margin:0 auto}
+  .nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);
+    background:rgba(7,19,27,.72);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:18px}
+  .brand img{width:34px;height:34px;border-radius:9px}
+  .nav-links{display:flex;align-items:center;gap:26px;font-size:14px;color:var(--muted)}
+  .nav-links a:hover{color:var(--text)}
+  .btn{display:inline-flex;align-items:center;gap:9px;border-radius:11px;padding:12px 22px;
+    font-size:15px;font-weight:600;transition:.18s;border:1px solid transparent}
+  .btn-primary{background:linear-gradient(135deg,#10b981,#059669);color:#04120d;
+    box-shadow:0 10px 30px rgba(16,185,129,.28)}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 14px 36px rgba(16,185,129,.36)}
+  .btn-ghost{border-color:var(--line);color:var(--text);background:rgba(255,255,255,.03)}
+  .btn-ghost:hover{border-color:rgba(52,211,153,.5);background:rgba(16,185,129,.08)}
+  .hero{position:relative;overflow:hidden;padding:86px 0 40px}
+  .hero::before{content:"";position:absolute;width:760px;height:760px;left:-260px;top:-360px;
+    background:radial-gradient(circle,rgba(16,185,129,.22),transparent 62%);pointer-events:none}
+  .hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+                      linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+    background-size:46px 46px;
+    mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 78%)}
+  .hero .wrap{position:relative;z-index:2}
+  .pill{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#a7f3d0;
+    border:1px solid rgba(52,211,153,.3);background:rgba(16,185,129,.1);
+    padding:7px 14px;border-radius:999px;margin-bottom:26px}
+  .pill i{width:7px;height:7px;border-radius:50%;background:var(--green);display:block}
+  h1{font-size:clamp(34px,5vw,62px);line-height:1.18;letter-spacing:-1.5px;margin:0;font-weight:800}
+  h1 span{color:var(--green)}
+  .lead{font-size:clamp(16px,1.6vw,19px);color:var(--muted);max-width:780px;margin:20px 0 0}
+  .lead b{color:#d1fae5;font-weight:600}
+  .cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .meta{margin-top:16px;font-size:13px;color:var(--dim)}
+  .shot{margin:56px 0 0;position:relative}
+  .shot::before{content:"";position:absolute;inset:-14% 10% -10%;z-index:0;
+    background:radial-gradient(ellipse,rgba(16,185,129,.22),transparent 65%);filter:blur(30px)}
+  .shot img{position:relative;z-index:1;display:block;width:min(620px,100%);margin:0 auto;
+    border-radius:18px;border:1px solid rgba(148,163,184,.25);
+    box-shadow:0 40px 90px rgba(0,0,0,.55)}
+  section{padding:84px 0}
+  .kicker{font-size:13px;letter-spacing:2.5px;color:var(--green);text-transform:uppercase;font-weight:700}
+  h2{font-size:clamp(26px,3.2vw,38px);letter-spacing:-.8px;margin:12px 0 0;font-weight:750}
+  .section-lead{color:var(--muted);max-width:720px;margin:14px 0 0}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:42px}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+    border:1px solid var(--line);border-radius:16px;padding:26px;transition:.2s}
+  .card:hover{border-color:rgba(52,211,153,.35);transform:translateY(-2px)}
+  .card .ico{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;
+    background:rgba(16,185,129,.12);border:1px solid rgba(52,211,153,.25);
+    color:var(--green);font-size:19px;font-weight:700;margin-bottom:16px}
+  .card h3{margin:0;font-size:17px}
+  .card p{margin:9px 0 0;font-size:14px;color:var(--muted)}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:42px}
+  .step{padding:26px;border-left:2px solid rgba(52,211,153,.45);
+    background:linear-gradient(90deg,rgba(16,185,129,.06),transparent)}
+  .step b{display:block;color:var(--green);font-size:13px;letter-spacing:1px;margin-bottom:8px}
+  .step h3{margin:0;font-size:18px}
+  .step p{margin:8px 0 0;color:var(--muted);font-size:14px}
+  table{width:100%;border-collapse:collapse;margin-top:38px;font-size:14.5px}
+  th,td{padding:15px 18px;text-align:left;border-bottom:1px solid var(--line)}
+  th{color:var(--dim);font-weight:600;font-size:13px;letter-spacing:.5px}
+  td:first-child{color:var(--muted)}
+  tr.hl td{background:rgba(16,185,129,.07);color:var(--text)}
+  tr.hl td:last-child{color:#a7f3d0;font-weight:600}
+  .faq{margin-top:38px;display:grid;gap:12px}
+  details{border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.025);padding:18px 22px}
+  details[open]{border-color:rgba(52,211,153,.3)}
+  summary{cursor:pointer;font-weight:600;font-size:15px;list-style:none;display:flex;justify-content:space-between}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--green);font-weight:700}
+  details[open] summary::after{content:"−"}
+  details p{margin:12px 0 0;color:var(--muted);font-size:14.5px}
+  .final{position:relative;overflow:hidden;text-align:center;padding:96px 0}
+  .final::before{content:"";position:absolute;width:700px;height:400px;left:50%;top:50%;
+    transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(16,185,129,.2),transparent 68%)}
+  .final .wrap{position:relative;z-index:2}
+  .final h2{margin-bottom:14px}
+  .final p{color:var(--muted);max-width:640px;margin:0 auto}
+  .final .cta{justify-content:center}
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--dim);font-size:13px}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
+  .en{color:var(--muted);font-size:14px;margin-top:18px}
+  @media(max-width:860px){
+    .grid,.steps{grid-template-columns:1fr 1fr}
+    .nav-links{display:none}
+  }
+  @media(max-width:600px){
+    .grid,.steps{grid-template-columns:1fr}
+    section{padding:60px 0}
+    .hero{padding:56px 0 20px}
+    th,td{padding:11px 10px;font-size:13px}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/app-icon.png" alt="BinSweeper icon">BinSweeper</a>
+    <div class="nav-links">
+      <a href="#features">功能</a>
+      <a href="#safety">安全模型</a>
+      <a href="#faq">常见问题</a>
+      <a href="https://github.com/yuehua-meng/binsweeper" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn btn-primary" href="https://github.com/yuehua-meng/binsweeper/releases/latest">下载</a>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <div class="pill"><i></i>开源 · MIT · 本地运行 · 无需管理员</div>
+      <h1>回收站塞满几十万个小文件，<br><span>一打开就卡死</span>。</h1>
+      <p class="lead">BinSweeper 只做一件事：把回收站里 <b>≤ 1 MiB</b> 的小文件安全地移出去，让条目数量回到可用范围。<b>大文件一个都不碰</b>，混合目录整目录跳过，移走的内容 7 天内随时可以放回。</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://github.com/yuehua-meng/binsweeper/releases/latest">下载 Windows 版</a>
+        <a class="btn btn-ghost" href="https://gitee.com/kongbaiblank/binsweeper" target="_blank" rel="noopener">Gitee 镜像</a>
+        <a class="btn btn-ghost" href="https://github.com/yuehua-meng/binsweeper" target="_blank" rel="noopener">查看源码</a>
+      </div>
+      <p class="meta">Windows 10 / 11 · 单文件 exe，无需安装 .NET · 约 165 MB · v0.1.0</p>
+
+      <div class="shot">
+        <img src="assets/screenshot.png" alt="BinSweeper 界面：可清理小文件 2,403 个，大文件 9 个不自动处理" loading="eager">
+      </div>
+    </div>
+  </div>
+
+  <section id="features">
+    <div class="wrap">
+      <div class="kicker">Why BinSweeper</div>
+      <h2>只按大小分流，不赌你的数据</h2>
+      <p class="section-lead">通用清理软件往往扫描全盘、规则不透明。BinSweeper 的边界很小：只处理当前用户回收站里的小文件，其他一律不碰。</p>
+
+      <div class="grid">
+        <div class="card"><div class="ico">≤</div><h3>只清小文件</h3><p>默认只处理 ≤ 1 MiB 的条目，界值可通过 <code>--small-limit 64KB</code> 调低，越保守越安全。</p></div>
+        <div class="card"><div class="ico">×</div><h3>大文件零处理</h3><p>大于界值的文件只统计数量和占用，永远不会被自动移动或删除。</p></div>
+        <div class="card"><div class="ico">⧉</div><h3>混合目录整目录跳过</h3><p>目录里只要包含大文件，整个目录都不碰，避免误伤你留着手动处理的内容。</p></div>
+        <div class="card"><div class="ico">↺</div><h3>两阶段安全模型</h3><p>先同卷 rename 进待清理区，可一键放回回收站；物理删除永远由你手动触发。</p></div>
+        <div class="card"><div class="ico">⚡</div><h3>同卷 rename，不复制</h3><p>移动几万个文件也只更新目录项，不重写内容，速度和磁盘占用都可控。</p></div>
+        <div class="card"><div class="ico">⌂</div><h3>本地、离线、无管理员</h3><p>只读取你自己的回收站，不上传文件名、不联网、不需要管理员权限。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="safety" style="background:linear-gradient(180deg,transparent,rgba(16,185,129,.045),transparent)">
+    <div class="wrap">
+      <div class="kicker">Safety Model</div>
+      <h2>一次清理，只做三件事</h2>
+      <p class="section-lead">扫描 → 分级 → 搬运。恢复是反向操作，永久删除是唯一不可逆的动作，而且必须由你确认。</p>
+      <div class="steps">
+        <div class="step"><b>01 · 扫描</b><h3>只读盘点</h3><p>定位每个固定磁盘的 <code>$Recycle.Bin\&lt;SID&gt;</code>，解析 <code>$I</code> 元数据并与 <code>$R</code> 内容配对，统计目录内部的小文件。</p></div>
+        <div class="step"><b>02 · 分级</b><h3>四类条目</h3><p>可清理小文件 / 大文件 / 混合目录 / 未知。只有第一类进入候选，其余全部保持原样。</p></div>
+        <div class="step"><b>03 · 搬运</b><h3>可恢复优先</h3><p>成对 <code>rename</code> 到 <code>%LOCALAPPDATA%\BinSweeper\staging</code>。失败会回滚，恢复会原样放回。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="kicker">Comparison</div>
+      <h2>为什么不用「全选删除」或「一键清空」</h2>
+      <table>
+        <thead><tr><th>做法</th><th>结果</th></tr></thead>
+        <tbody>
+          <tr><td>按大小排序，手动挑小文件</td><td>几万条起，鼠标点不过来</td></tr>
+          <tr><td>直接清空回收站</td><td>大文件和还想留的文件一起没了</td></tr>
+          <tr><td>通用清理软件</td><td>扫全盘、要管理员、规则不透明，还可能捆绑</td></tr>
+          <tr class="hl"><td>BinSweeper</td><td>只按大小分流，先隔离后删除，大文件不动，可恢复</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="faq" style="background:linear-gradient(180deg,transparent,rgba(16,185,129,.045),transparent)">
+    <div class="wrap">
+      <div class="kicker">FAQ</div>
+      <h2>常见问题</h2>
+      <div class="faq">
+        <details open><summary>会不会把我重要的文件删掉？</summary><p>不会自动删除任何大文件；小文件也只是先移入待清理区，不会立刻物理删除。真正的删除只有两个入口：你手动点「直接全部删除」，或你手动点「永久清空待清理区」。</p></details>
+        <details><summary>为什么只处理 ≤ 1 MiB 的小文件？</summary><p>回收站卡顿的根因通常是条目数量，而不是总体积。几十万个小文件会让资源管理器逐条读取元数据；清理小文件能最快把条目数降下来，同时把误删大文件的风险降到最低。</p></details>
+        <details><summary>待清理区的文件在哪里？还能找回来吗？</summary><p>默认在 <code>%LOCALAPPDATA%\BinSweeper\staging</code>。点「恢复全部」或执行 <code>binsweeper restore all</code>，条目会原样放回回收站，之后仍可在资源管理器里还原到原位置。</p></details>
+        <details><summary>需要管理员权限吗？会上传数据吗？</summary><p>不需要管理员。程序只读取当前用户自己的回收站，完全离线运行，不上传任何文件或文件名。</p></details>
+        <details><summary>支持 Windows 7 吗？</summary><p>不支持。项目基于 .NET 10 和 WPF，最低要求 Windows 10 1607 及以上。</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap">
+      <h2>让回收站从「卡死」变回「能用」</h2>
+      <p>单文件、免安装、开源 MIT。如果它帮到了你，欢迎在 GitHub 点一个 Star。</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://github.com/yuehua-meng/binsweeper/releases/latest">下载最新版</a>
+        <a class="btn btn-ghost" href="https://github.com/yuehua-meng/binsweeper" target="_blank" rel="noopener">GitHub Star</a>
+        <a class="btn btn-ghost" href="https://gitee.com/kongbaiblank/binsweeper" target="_blank" rel="noopener">Gitee Star</a>
+      </div>
+      <p class="en">BinSweeper is an open-source Windows Recycle Bin cleaner that only removes files ≤ 1 MiB. Large files are never touched, and every moved item can be restored.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 yuehua-meng · MIT License</span>
+    <span>
+      <a href="https://github.com/yuehua-meng/binsweeper">GitHub</a> ·
+      <a href="https://gitee.com/kongbaiblank/binsweeper">Gitee</a> ·
+      <a href="https://github.com/yuehua-meng/binsweeper/issues">Issues</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
