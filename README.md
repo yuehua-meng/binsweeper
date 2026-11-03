@@ -23,6 +23,7 @@
 
   <p>
     <b>简体中文</b> · <a href="README.en.md">English</a> ·
+    <a href="https://yuehua-meng.github.io/binsweeper/">官网</a> ·
     <a href="https://github.com/yuehua-meng/binsweeper/releases/latest">下载最新版</a> ·
     <a href="https://gitee.com/kongbaiblank/binsweeper/releases">Gitee 发行版</a> ·
     <a href="https://github.com/yuehua-meng/binsweeper/issues">反馈问题</a>
