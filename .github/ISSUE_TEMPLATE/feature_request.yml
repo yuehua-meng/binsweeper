@@ -1,0 +1,38 @@
+name: Feature request
+description: 说说你希望 BinSweeper 增加或改进什么。
+title: "[Feature] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请先描述「遇到的场景」，再描述「期望的方案」。这比直接给实现方案更有助于判断是否值得做。
+  - type: textarea
+    id: scenario
+    attributes:
+      label: 使用场景
+      placeholder: "例如：我有 3 块硬盘，希望只清理 D 盘开发目录下的构建产物……"
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 期望的解决方案
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 考虑过的替代方案
+  - type: dropdown
+    id: area
+    attributes:
+      label: 涉及模块
+      multiple: true
+      options:
+        - 扫描与统计
+        - 待清理区 / 恢复
+        - 永久删除
+        - 自动清理策略
+        - 界面 / 托盘
+        - 命令行
+        - 其他

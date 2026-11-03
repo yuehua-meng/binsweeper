@@ -1,0 +1,24 @@
+# Build output
+bin/
+obj/
+dist/
+artifacts/
+TestResults/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.DotSettings.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs and local dumps
+*.log
+*.dmp
+*.tmp

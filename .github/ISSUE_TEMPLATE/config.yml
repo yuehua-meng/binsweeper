@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Gitee 镜像仓库
+    url: https://gitee.com/kongbaiblank/binsweeper
+    about: 国内访问更快，也可以在 Gitee 提 Issue。
