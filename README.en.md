@@ -63,7 +63,7 @@ BinSweeper does one thing: **move small files (≤ 1 MiB) out of the Recycle Bin
 ### Download
 
 1. Open [Releases](https://github.com/yuehua-meng/binsweeper/releases/latest).
-2. Download `BinSweeper.exe` — a self-contained single file, no .NET installation required.
+2. Download `BinSweeper.exe` — a self-contained single file, no .NET installation required. On Gitee, use the `BinSweeper-win-x64.zip` attachment (100 MB per-file limit).
 3. Run it. The first scan reports eligible small files, large files, and the staging area.
 
 > The binary is not code-signed, so SmartScreen may show "Unknown publisher". Choose "More info → Run anyway", or build from source.

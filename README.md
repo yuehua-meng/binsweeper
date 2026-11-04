@@ -67,8 +67,8 @@ BinSweeper 只做一件事：**把回收站里 ≤ 1 MiB 的小文件安全地�
 
 ### 方式一：下载即用（推荐）
 
-1. 打开 [Releases](https://github.com/yuehua-meng/binsweeper/releases/latest) 或 [Gitee 发行版](https://gitee.com/kongbaiblank/binsweeper/releases)。
-2. 下载 `BinSweeper.exe`。单文件、自带运行时，不需要安装 .NET。
+1. 打开 [GitHub Releases](https://github.com/yuehua-meng/binsweeper/releases/latest) 或 [Gitee 发行版](https://gitee.com/kongbaiblank/binsweeper/releases)。
+2. GitHub 下载 `BinSweeper.exe`；Gitee 因单文件 100 MB 限制，下载 `BinSweeper-win-x64.zip` 后解压。单文件自带运行时，不需要安装 .NET。
 3. 双击运行。首次启动会自动扫描，结果分为「可清理小文件 / 大文件 / 待清理区」。
 
 > 程序没有代码签名，Windows SmartScreen 可能提示「未知发布者」。点「更多信息 → 仍要运行」即可。介意的话可以按下面的方式从源码构建。
